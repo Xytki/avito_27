@@ -13,16 +13,39 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from ads.views import cool, AdListCreateView, AdDetailView, CatListCreateView, CategoryDetailView
+from ads.views import AdDetailView, CategoryCreateView, CategoryDetailView, CategoryListView, \
+    CategoryUpdateView, CategoryDeleteView, AdListView, AdCreateView, AdUpdateView, AdDeleteView, AdImageUpload
+from hw_27 import settings
+from users.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', cool),
-    path('ad/', AdListCreateView.as_view()),
-    path('ad/<int:pk>', AdDetailView.as_view()),
-    path('cat/', CatListCreateView.as_view()),
-    path('cat/<int:pk>', CategoryDetailView.as_view()),
+    path('cat/', CategoryListView.as_view()),
+    path('cat/<int:pk>/', CategoryDetailView.as_view()),
+    path('cat/create/', CategoryCreateView.as_view()),
+    path('cat/<int:pk>/update/', CategoryUpdateView.as_view()),
+    path('cat/<int:pk>/delete/', CategoryDeleteView.as_view()),
+    path('ad/', AdListView.as_view()),
+    path('ad/<int:pk>/', AdDetailView.as_view()),
+    path('ad/create/', AdCreateView.as_view()),
+    path('ad/<int:pk>/update/', AdUpdateView.as_view()),
+    path('ad/<int:pk>/delete/', AdDeleteView.as_view()),
+
+    path('ad/<int:pk>/upload_image/', AdImageUpload.as_view()),
+
+    path('user/', UserListView.as_view()),
+    path('user/<int:pk>/', UserDetailView.as_view()),
+    path('user/create/', UserCreateView.as_view()),
+    path('user/<int:pk>/update/', UserUpdateView.as_view()),
+    path('user/<int:pk>/delete/', UserDeleteView.as_view()),
+
+
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
